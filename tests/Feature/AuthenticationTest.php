@@ -71,4 +71,51 @@ class AuthenticationTest extends TestCase
         $response->assertOk()
             ->assertExactJson([ "message" => "Logged out successfully" ]);
     }
+
+    /**
+     * @test
+     */
+    public function userCanRegisterWithEmailAndPassword()
+    {
+        $userData = [
+            'name' => 'Samuel Seyi',
+            'email' => 'me@example.com',
+            'password' => '123mmm!!!'
+        ];
+
+        $response = $this->post(route('register'), $userData);
+
+        $response->assertSuccessful()
+            ->assertJsonStructure([
+                'data' => [ 'id', 'name', 'email' ],
+                'message'
+            ]);
+
+       $this->assertDatabaseHas('users', [
+            'email' => $userData['email'],
+            'name' => $userData['name']
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function userCanNotRegisterWithInvalidEmailAndPassword()
+    {
+        $userData = [
+            'name' => 'Samuel Seyi',
+            'email' => 'me@ex',
+            'password' => '12'
+        ];
+
+        $response = $this->post(route('register'), $userData);
+
+        $response->assertStatus(400)
+            ->assertJsonStructure([ 'errors' ]);
+
+        $this->assertDatabaseMissing('users', [
+            'email' => $userData['email'],
+            'name' => $userData['name']
+        ]);
+    }
 }

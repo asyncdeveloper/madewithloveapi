@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,6 +81,54 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Logged out successfully',
         ]);
+    }
+
+    /**
+     * @SWG\Post(
+     *   tags={"Auth"},
+     *   path="/auth/register",
+     *   summary="Create user",
+     *  @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     required=true,
+     *     @SWG\Schema(ref="#/definitions/User"),
+     *   ),
+     *   @SWG\Response(response=201, description="User created successfully"),
+     *   @SWG\Response(response=400, description="Invalid email/password/name supplied")
+     * )
+     */
+    public function register(Request $request)
+    {
+        $data = $request->only(['email', 'password', 'name' ]);
+
+        $validator = Validator::make($data, [
+            'name' => 'required|string|min:3|max:191',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:3|max:191'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+
+        return response()->json([
+            'message' => 'Successfully created user',
+            'data' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email
+            ]
+        ], 201);
     }
 
 }
