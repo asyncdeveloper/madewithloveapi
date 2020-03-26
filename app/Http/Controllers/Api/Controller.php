@@ -21,7 +21,13 @@ use Illuminate\Routing\Controller as BaseController;
  *         @SWG\Contact(
  *             email="contact@asyncdeveloper.com"
  *         )
- *     )
+ *     ),
+ *     @SWG\SecurityScheme(
+ *       securityDefinition="Bearer",
+ *       type="apiKey",
+ *       in="header",
+ *       name="Authorization"
+ *   )
  * )
  */
 class Controller extends BaseController

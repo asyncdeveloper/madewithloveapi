@@ -62,4 +62,24 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * @SWG\Get(
+     *   tags={"Auth"},
+     *   path="/auth/logout",
+     *   summary="Logout user",
+     *   @SWG\Response(response=200, description="Logout successful"),
+     *   @SWG\Response(response=401, description="Unauthenticated"),
+     *   security={
+     *    { "Bearer":{} }
+     *   },
+     * )
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json([
+            'message' => 'Logged out successfully',
+        ]);
+    }
+
 }

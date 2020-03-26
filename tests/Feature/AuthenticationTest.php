@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
@@ -54,5 +55,20 @@ class AuthenticationTest extends TestCase
 
         $response->assertStatus(401)
             ->assertExactJson([ "message" => "Invalid login credentials" ]);
+    }
+
+    /**
+     * @test
+     */
+    public function userCanLogOutWithAccessToken()
+    {
+        $user = factory(User::class)->make();
+
+        Passport::actingAs($user);
+
+        $response = $this->get(route('logout'));
+
+        $response->assertOk()
+            ->assertExactJson([ "message" => "Logged out successfully" ]);
     }
 }
