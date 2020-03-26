@@ -15,7 +15,7 @@ class CartTest extends TestCase
     /**
      * @test
      */
-    public function loggedInUserCanCreateCartWithItems()
+    public function loggedInUserCanCreateCartWithProduct()
     {
         $user = factory(User::class)->create();
         $products = factory(Product::class, 5)->create();
@@ -46,7 +46,7 @@ class CartTest extends TestCase
     /**
      * @test
      */
-    public function userCanCreateCartWithNoItems()
+    public function userCanCreateCartWithNoProduct()
     {
         $response = $this->post(route('carts.store'));
 

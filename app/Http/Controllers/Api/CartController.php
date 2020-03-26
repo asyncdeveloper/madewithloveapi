@@ -40,12 +40,11 @@ class CartController extends Controller
         $cart = Cart::create([ 'user_id' => isset($user) ? $user->id : NULL ]);
 
         if(isset($data['productId'])) {
-            $cartItem = CartProduct::create([
+            CartProduct::create([
                 'cart_id' => $cart->id,
                 'product_id' => $data['productId'],
                 'quantity' => $data['quantity']
             ]);
-            $cart->items()->save($cartItem);
             $message = 'Cart created successfully with product';
         }
 

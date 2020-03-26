@@ -10,7 +10,7 @@ class Cart extends Model
         'user_id', 'removed_products'
     ];
 
-    public function items()
+    public function products()
     {
         return $this->hasMany(CartProduct::class);
     }
