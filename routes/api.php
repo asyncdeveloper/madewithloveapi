@@ -21,4 +21,6 @@ Route::group([ 'namespace' => 'Api'], function(){
         });
     });
 
+    Route::apiResource('products', 'ProductController');
+
 });

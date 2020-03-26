@@ -11,6 +11,6 @@
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call(ProductSeeder::class);
     }
 }
