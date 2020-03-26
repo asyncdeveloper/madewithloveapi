@@ -88,6 +88,6 @@ class CartProductTest extends TestCase
         $response = $this->get(route('carts.products.index', [ 'cart' => $cart->id ]));
 
         $response->assertOk()
-            ->assertJsonStructure([ 'data' => [ 'id' , 'name', 'price', 'quantity' ] ]);
+            ->assertJsonStructure([ 'data' => [ [ 'id', 'name', 'price', 'quantity' ] ] ]);
     }
 }
