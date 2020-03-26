@@ -19,6 +19,27 @@ class CartProductController extends Controller
         return CartProductResource::collection($cart->products);
     }
 
+    public function update(Request $request, Cart $cart, Product $product)
+    {
+        $data = $request->only([ 'quantity' ]);
+
+        $validator = Validator::make($data, [
+            'quantity' => 'required|numeric|min:1|max:20'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $cart->products()->where('product_id', $product->id)->update([
+            'quantity' => $data['quantity']
+        ]);
+
+        return response()->noContent();
+    }
+
     public function store(Request $request, Cart $cart)
     {
         $data = $request->only(['productId', 'quantity']);

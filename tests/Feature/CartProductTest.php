@@ -90,4 +90,36 @@ class CartProductTest extends TestCase
         $response->assertOk()
             ->assertJsonStructure([ 'data' => [ [ 'id', 'name', 'price', 'quantity' ] ] ]);
     }
+
+    /**
+     * @test
+     */
+    public function userCanUpdateProductInCart()
+    {
+        $cart = factory(Cart::class)->create([
+            'user_id' => NULL
+        ]);
+
+        $products = factory(CartProduct::class, 3)->create([
+            'cart_id' => $cart->id,
+            'quantity' => 2
+        ]);
+
+        $response = $this->patch(
+            route('carts.products.update', [
+                'cart' => $cart->id,
+                'product' => $products->first()->id
+            ]),
+            [ "quantity" => 8 ]
+        );
+
+        $response->assertNoContent();
+
+        $this->assertDatabaseHas('cart_products', [
+            'quantity' => 8,
+            'cart_id' => $cart->id,
+            'product_id' => $products->first()->id
+        ]);
+    }
+
 }
