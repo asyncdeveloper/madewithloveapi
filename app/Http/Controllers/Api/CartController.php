@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
-use App\Models\CartItem;
+use App\Models\CartProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -40,17 +40,17 @@ class CartController extends Controller
         $cart = Cart::create([ 'user_id' => isset($user) ? $user->id : NULL ]);
 
         if(isset($data['productId'])) {
-            $cartItem = CartItem::create([
+            $cartItem = CartProduct::create([
                 'cart_id' => $cart->id,
                 'product_id' => $data['productId'],
                 'quantity' => $data['quantity']
             ]);
             $cart->items()->save($cartItem);
-            $message = 'Cart created successfully with items';
+            $message = 'Cart created successfully with product';
         }
 
         return response()->json([
-            'message' => $message ?? 'Cart created successfully with no items',
+            'message' => $message ?? 'Cart created successfully with no product',
             'cartId' => $cart->id,
         ], 201);
     }

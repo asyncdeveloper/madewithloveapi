@@ -32,12 +32,12 @@ class CartTest extends TestCase
         $response->assertSuccessful()
             ->assertJsonStructure([ 'cartId', 'message'])
             ->assertJsonFragment([
-                'message' => 'Cart created successfully with items'
+                'message' => 'Cart created successfully with product'
             ]);
 
         $this->assertDatabaseHas('carts', [
             'user_id' => $cartData['user_id'],
-        ])->assertDatabaseHas('cart_items', [
+        ])->assertDatabaseHas('cart_products', [
             'product_id' => $cartData['productId'],
             'quantity' => $cartData['quantity']
         ]);
@@ -53,7 +53,7 @@ class CartTest extends TestCase
         $response->assertSuccessful()
             ->assertJsonStructure([ 'cartId', 'message'])
             ->assertJsonFragment([
-                'message' => 'Cart created successfully with no items'
+                'message' => 'Cart created successfully with no product'
             ]);
     }
 
