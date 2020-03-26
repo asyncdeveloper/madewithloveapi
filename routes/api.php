@@ -10,11 +10,15 @@
     |
 */
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', 'AuthController@login')->name('login');
-    Route::post('register', 'AuthController@register')->name('register');
+Route::group([ 'namespace' => 'Api'], function(){
 
-    Route::group(['middleware' => 'auth:api', 'swfix'], function () {
-        Route::get('logout', 'AuthController@logout')->name('logout');
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('login', 'AuthController@login')->name('login');
+        Route::post('register', 'AuthController@register')->name('register');
+
+        Route::group(['middleware' => 'auth:api', 'swfix'], function () {
+            Route::get('logout', 'AuthController@logout')->name('logout');
+        });
     });
+
 });
