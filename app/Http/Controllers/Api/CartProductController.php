@@ -55,12 +55,23 @@ class CartProductController extends Controller
             ], 400);
         }
 
-        CartProduct::create([
+        $cartProduct = CartProduct::where([
             'cart_id' => $cart->id,
-            'product_id' => $data['productId'],
-            'quantity' => $data['quantity']
-        ]);
+            'product_id' => $data['productId']
+        ])->first();
 
+        if(! is_null($cartProduct)) {
+            $cartProduct->update([
+                'quantity' => $data['quantity']
+            ]);
+        }else {
+            CartProduct::create([
+                'cart_id' => $cart->id,
+                'product_id' => $data['productId'],
+                'quantity' => $data['quantity']
+            ]);
+        }
+        
         return response()->json([
             'message' => 'Product added to cart successfully',
         ], 201);
