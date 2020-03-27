@@ -20,7 +20,7 @@ class AuthController extends Controller
      *     name="body",
      *     in="body",
      *     required=true,
-     *     @SWG\Schema(ref="#/definitions/User"),
+     *     @SWG\Schema(ref="#/definitions/UserRequest"),
      *   ),
      *   @SWG\Response(response=200, description="Login successful"),
      *   @SWG\Response(response=401, description="Invalid login supplied"),
@@ -81,7 +81,7 @@ class AuthController extends Controller
      *     name="body",
      *     in="body",
      *     required=true,
-     *     @SWG\Schema(ref="#/definitions/User"),
+     *     @SWG\Schema(ref="#/definitions/UserRequest"),
      *   ),
      *   @SWG\Response(response=201, description="User created successfully"),
      *   @SWG\Response(response=422, description="Invalid email/password/name supplied")
