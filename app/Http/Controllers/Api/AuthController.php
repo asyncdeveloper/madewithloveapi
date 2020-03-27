@@ -2,11 +2,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -23,24 +23,14 @@ class AuthController extends Controller
      *     @SWG\Schema(ref="#/definitions/User"),
      *   ),
      *   @SWG\Response(response=200, description="Login successful"),
-     *   @SWG\Response(response=400, description="Invalid email/password supplied"),
-     *   @SWG\Response(response=401, description="Incorrect email/password supplied")
+     *   @SWG\Response(response=401, description="Invalid login supplied"
+     *   @SWG\Response(response=422, description="Invalid body"),
+    )
      * )
      */
-    public function login(Request $request)
+    public function login(UserRequest $request)
     {
-        $data = $request->only(['email', 'password']);
-
-        $validator = Validator::make($data, [
-            'email' => 'required|string|email',
-            'password' => 'required|string'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 400);
-        }
+        $data = $request->validated();
 
         if (!Auth::attempt($data)) {
             return response()->json([
@@ -94,25 +84,12 @@ class AuthController extends Controller
      *     @SWG\Schema(ref="#/definitions/User"),
      *   ),
      *   @SWG\Response(response=201, description="User created successfully"),
-     *   @SWG\Response(response=400, description="Invalid email/password/name supplied")
+     *   @SWG\Response(response=422, description="Invalid email/password/name supplied")
      * )
      */
-    public function register(Request $request)
+    public function register(UserRequest $request)
     {
-        $data = $request->only(['email', 'password', 'name' ]);
-
-        $validator = Validator::make($data, [
-            'name' => 'required|string|min:3|max:191',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:3|max:191'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 400);
-        }
-
+        $data = $request->validated();
 
         $user = User::create([
             'name' => $data['name'],
