@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
@@ -108,10 +109,11 @@ class AuthenticationTest extends TestCase
             'password' => '12'
         ];
 
-        $response = $this->post(route('register'), $userData);
-
-        $response->assertStatus(400)
-            ->assertJsonStructure([ 'errors' ]);
+        try {
+             $this->post(route('register'), $userData);
+        } catch (ValidationException $e) {
+            $this->expectException($e);
+        }
 
         $this->assertDatabaseMissing('users', [
             'email' => $userData['email'],
