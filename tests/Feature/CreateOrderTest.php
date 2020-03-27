@@ -19,7 +19,7 @@ class CreateOrderTest extends TestCase
             'user_id' => NULL
         ]);
 
-        $cartProducts = factory(CartProduct::class, 2)->create([
+        factory(CartProduct::class, 2)->create([
             'cart_id' => $cart->id
         ]);
 

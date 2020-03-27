@@ -25,5 +25,6 @@ Route::group([ 'namespace' => 'Api'], function(){
     Route::apiResource('carts', 'CartController');
     Route::apiResource('carts.products', 'CartProductController');
     Route::apiResource('orders', 'OrderController');
+    Route::get('data', 'DataController@removedProducts')->name('data');
 
 });
