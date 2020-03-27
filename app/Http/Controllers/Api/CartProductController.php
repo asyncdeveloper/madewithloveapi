@@ -13,12 +13,35 @@ use App\Models\Product;
 class CartProductController extends Controller
 {
 
+    /**
+     * @SWG\Get(
+     *   tags={"CartProduct"},
+     *   path="/carts/{id}/products",
+     *   summary="Display products in a cart",
+     *   @SWG\Response(response=200, description="Successful")
+     * )
+     */
     public function index(Cart $cart)
     {
         $cart->load('products');
         return CartProductResource::collection($cart->products);
     }
 
+    /**
+     * @SWG\Patch(
+     *  tags={"CartProduct"},
+     *  path="/carts/{id}/products/{id}",
+     *  summary="Update cart product quantity",
+     *  @SWG\Parameter(
+     *    name="body",
+     *    in="body",
+     *    required=true,
+     *    @SWG\Schema(ref="#/definitions/CartRequest"),
+     *  ),
+     *  @SWG\Response(response=204, description="Cart updated successfully"),
+     *  @SWG\Response(response=404, description="Cart/Product not found")
+     * )
+     */
     public function update(CartRequest $request, Cart $cart, Product $product)
     {
         $data = $request->validated();
@@ -30,6 +53,21 @@ class CartProductController extends Controller
         return response()->noContent();
     }
 
+    /**
+     * @SWG\Post(
+     *  tags={"CartProduct"},
+     *  path="/carts/{id}/products",
+     *  summary="Add product to cart",
+     *  @SWG\Parameter(
+     *    name="body",
+     *    in="body",
+     *    required=true,
+     *    @SWG\Schema(ref="#/definitions/CartRequest"),
+     *  ),
+     *  @SWG\Response(response=201, description="Product added to cartsuccessfully"),
+     *  @SWG\Response(response=404, description="Cart/Product not found")
+     * )
+     */
     public function store(CartRequest $request, Cart $cart)
     {
         $data = $request->validated();
@@ -56,6 +94,15 @@ class CartProductController extends Controller
         ], 201);
     }
 
+    /**
+     * @SWG\Delete(
+     *  tags={"CartProduct"},
+     *  path="/carts/{id}/products/{id}",
+     *  summary="Remove product from cart",
+     *  @SWG\Response(response=204, description="Product removed from cart successfully"),
+     *  @SWG\Response(response=404, description="Cart/Product not found")
+     * )
+     */
     public function destroy(Cart $cart, Product $product)
     {
         //Keep track of removed product

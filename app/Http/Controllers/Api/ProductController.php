@@ -15,14 +15,27 @@ class ProductController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
+     * @SWG\Get(
+     *   tags={"Product"},
+     *   path="/products",
+     *   summary="Display all products",
+     *   @SWG\Response(response=200, description="Successful")
+     * )
      */
     public function index()
     {
         return ProductResource::collection(Product::all());
     }
 
+    /**
+     * @SWG\Get(
+     *   tags={"Product"},
+     *   path="/products/{id}",
+     *   summary="Show one product",
+     *   @SWG\Response(response=200, description="Successful"),
+     *   @SWG\Response(response=404, description="Product not found")
+     * )
+     */
     public function show(Product $product)
     {
         return new ProductResource($product);

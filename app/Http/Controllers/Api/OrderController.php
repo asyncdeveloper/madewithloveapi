@@ -12,6 +12,22 @@ use Illuminate\Support\Facades\Validator;
 class OrderController extends Controller
 {
 
+    /**
+     * @SWG\Post(
+     *  tags={"Order"},
+     *  path="/orders",
+     *  summary="Checkout from cart",
+     *  @SWG\Parameter(
+     *    name="body",
+     *    in="body",
+     *    required=true,
+     *    @SWG\Schema(ref="#/definitions/Order"),
+     *  ),
+     *  @SWG\Response(response=201, description="Product added to cartsuccessfully"),
+     *  @SWG\Response(response=400, description="Invalid body"),
+     *  @SWG\Response(response=404, description="Cart not found")
+     * )
+     */
     public function store(Request $request)
     {
         $data = $request->only([ 'cartId', 'name', 'address' ]);

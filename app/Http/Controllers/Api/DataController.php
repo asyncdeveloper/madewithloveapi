@@ -9,6 +9,14 @@ use App\Models\Cart;
 class DataController extends Controller
 {
 
+    /**
+     * @SWG\Get(
+     *   tags={"Data"},
+     *   path="/data",
+     *   summary="Display removed products in cart",
+     *   @SWG\Response(response=200, description="Successful")
+     * )
+     */
     public function removedProducts()
     {
         return DataResource::collection(Cart::where('removed_products', '<>', NULL)->get());
