@@ -3,38 +3,35 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CartRequest;
 use App\Models\Cart;
 use App\Models\CartProduct;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @SWG\Post(
+     *   tags={"Cart"},
+     *   path="/carts",
+     *   summary="Create a cart",
+     *  @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     required=true,
+     *     @SWG\Schema(ref="#/definitions/CartRequest"),
+     *   ),
+     *   @SWG\Response(response=201, description="Cart created successfully"),
+     *   @SWG\Response(response=422, description="Invalid body supplied")
+     * )
      */
-    public function store(Request $request)
+    public function store(CartRequest $request)
     {
-        $data = $request->only([ 'productId', 'quantity' ]);
+        $data = $request->validated();
 
         if (Auth::guard('api')->check()) {
             $user = auth('api')->user();
-        }
-
-        $validator = Validator::make($data, [
-            'productId' => 'sometimes|exists:products,id',
-            'quantity' => 'sometimes|numeric|min:1|max:20|required_with:productId'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 400);
         }
 
         $cart = Cart::create([ 'user_id' => isset($user) ? $user->id : NULL ]);

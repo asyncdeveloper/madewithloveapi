@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CartRequest;
 use App\Http\Resources\CartProductResource;
 use App\Models\Cart;
 use App\Models\CartProduct;
 use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+
 
 class CartProductController extends Controller
 {
@@ -19,19 +19,9 @@ class CartProductController extends Controller
         return CartProductResource::collection($cart->products);
     }
 
-    public function update(Request $request, Cart $cart, Product $product)
+    public function update(CartRequest $request, Cart $cart, Product $product)
     {
-        $data = $request->only([ 'quantity' ]);
-
-        $validator = Validator::make($data, [
-            'quantity' => 'required|numeric|min:1|max:20'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 400);
-        }
+        $data = $request->validated();
 
         $cart->products()->where('product_id', $product->id)->update([
             'quantity' => $data['quantity']
@@ -40,20 +30,9 @@ class CartProductController extends Controller
         return response()->noContent();
     }
 
-    public function store(Request $request, Cart $cart)
+    public function store(CartRequest $request, Cart $cart)
     {
-        $data = $request->only(['productId', 'quantity']);
-
-        $validator = Validator::make($data, [
-            'productId' => 'required|exists:products,id',
-            'quantity' => 'required|numeric|min:1|max:20'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 400);
-        }
+        $data = $request->validated();
 
         $cartProduct = CartProduct::where([
             'cart_id' => $cart->id,
@@ -71,7 +50,7 @@ class CartProductController extends Controller
                 'quantity' => $data['quantity']
             ]);
         }
-        
+
         return response()->json([
             'message' => 'Product added to cart successfully',
         ], 201);
