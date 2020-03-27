@@ -18,7 +18,12 @@ class CartRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if($this->route()->getName() === 'carts.store')
+            return true;
+
+        $cartUser = $this->route('cart')->user_id ?? NULL;
+        $userId = auth('api')->user()->id ?? NULL;
+        return $cartUser === $userId;
     }
 
     /**

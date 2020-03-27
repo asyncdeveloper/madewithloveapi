@@ -105,6 +105,11 @@ class CartProductController extends Controller
      */
     public function destroy(Cart $cart, Product $product)
     {
+        $userId = auth('api')->user()->id ?? NULL;
+        if($cart->user_id !== $userId ) {
+            return response()->json([ 'message' => 'This action is unauthorized.'], 401);
+        }
+
         //Keep track of removed product
         $productId = $product->id;
         $removedProducts = json_encode([ $product->id => $product->name ]);
