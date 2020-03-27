@@ -4,6 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @SWG\Definition(type="object", @SWG\Xml(name="Cart"))
+ * @SWG\Property(type="string", property="id"),
+ * @SWG\Property(type="string", property="user_id"),
+ * @SWG\Property(type="string",property="removed_products")
+ */
 class Cart extends Model
 {
     protected $fillable = [
