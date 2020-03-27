@@ -23,7 +23,7 @@ class AuthController extends Controller
      *     @SWG\Schema(ref="#/definitions/User"),
      *   ),
      *   @SWG\Response(response=200, description="Login successful"),
-     *   @SWG\Response(response=401, description="Invalid login supplied"
+     *   @SWG\Response(response=401, description="Invalid login supplied"),
      *   @SWG\Response(response=422, description="Invalid body"),
     )
      * )
