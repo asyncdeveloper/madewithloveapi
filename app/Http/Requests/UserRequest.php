@@ -4,6 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @SWG\Definition(type="object", @SWG\Xml(name="UserRequest"))
+ * @SWG\Property(type="string", property="name"),
+ * @SWG\Property(type="string", property="email"),
+ * @SWG\Property(type="string", property="password"),
+ */
 class UserRequest extends FormRequest
 {
     /**

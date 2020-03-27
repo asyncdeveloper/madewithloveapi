@@ -4,6 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @SWG\Definition(type="object", @SWG\Xml(name="OrderRequest"))
+ * @SWG\Property(type="string", property="cartId"),
+ * @SWG\Property(type="string", property="name"),
+ * @SWG\Property(type="string", property="address"),
+ */
 class OrderRequest extends FormRequest
 {
     /**
